@@ -12,6 +12,12 @@ let io = require('socket.io')(http);
 io.on('connection', socket => {
     console.log('Un cliente se ha conectado');
 
+    socket.on('mensaje', data =>{
+        console.log(data);
+        io.emit('mensaje', 'Conectado correctamente');
+    })
+
+
     socket.on('disconnect', ()=> {
         console.log('Un cliente se ha desconectado');
     })
