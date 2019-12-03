@@ -10,6 +10,7 @@ let http = require('http').Server(app);
 let io = require('socket.io')(http);
 
 let users = [];
+let mensajes = [];
 
 io.on('connection', socket => {
     
@@ -20,6 +21,9 @@ io.on('connection', socket => {
         socket.on('start', data => {
             user.nombre = (JSON.parse(data)).nombre;
             users.push(user);
+            mensajes.forEach(mensaje => {
+                io.to(socket.id).emit('mensaje', JSON.stringify(mensaje));
+            })
             io.emit('mensaje', JSON.stringify(users));
         })
     }
@@ -31,6 +35,7 @@ io.on('connection', socket => {
             texto: (JSON.parse(data)).texto,
             fecha: new Date()
         }
+        mensajes.push(mensajeBack);
         io.emit('mensaje', JSON.stringify(mensajeBack));
     })
 
