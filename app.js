@@ -24,17 +24,19 @@ io.on('connection', socket => {
         })
     }
 
-    console.log(users);
-
     socket.on('mensaje', data =>{
-        console.log(data);
-        io.emit('mensaje', data);
+        let mensajeBack = {
+            nombre: (JSON.parse(data)).nombre,
+            avatar: (JSON.parse(data)).avatar,
+            texto: (JSON.parse(data)).texto,
+            fecha: new Date()
+        }
+        io.emit('mensaje', JSON.stringify(mensajeBack));
     })
 
     socket.on('disconnect', ()=> {
         console.log('Un cliente se ha desconectado');
     })
-    console.log(users);
 })
 
 
