@@ -24,7 +24,7 @@ io.on('connection', socket => {
             mensajes.forEach(mensaje => {
                 io.to(socket.id).emit('mensaje', JSON.stringify(mensaje));
             })
-            io.emit('mensaje', JSON.stringify(users));
+            io.emit('mensaje', JSON.stringify({usuarioConnect: user.nombre}));
         })
     }
 
@@ -40,7 +40,11 @@ io.on('connection', socket => {
     })
 
     socket.on('disconnect', ()=> {
-        console.log('Un cliente se ha desconectado');
+        let index = users.map(user => {return user.id}).indexOf(socket.id);
+        if(index > -1) {
+            io.emit('mensaje', JSON.stringify({usuarioDisconnect: users[index].nombre}));
+            users.splice(index, 1);
+        }
     })
 })
 
